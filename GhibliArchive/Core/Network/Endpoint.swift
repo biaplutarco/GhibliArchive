@@ -1,5 +1,5 @@
 //
-//  APIEndpoint.swift
+//  Endpoint.swift
 //  GhibliArchive
 //
 //  Created by Beatriz Plutarco on 03/04/25.
@@ -7,16 +7,58 @@
 
 import Foundation
 
-enum APIEndpoint {
-    case getFilms
-    case getFilm(id: Int)
+// MARK: - Enums
 
-    var url: URL? {
+enum HTTPMethod: String {
+    case get = "GET"
+}
+
+// MARK: - Protocol
+
+protocol Endpoint {
+    var baseURL: String { get }
+    var path: String { get }
+    var method: HTTPMethod { get }
+    
+    func getURL() -> URL?
+}
+
+extension Endpoint {
+    func getURL() -> URL? {
+        var component = URLComponents()
+        component.scheme = "https"
+        component.host = baseURL
+        component.path = path
+        return component.url
+    }
+}
+
+// MARK: - FilmEndpoint
+
+enum FilmEndpoint: Endpoint {
+    case getFilms
+    case getFilmBy(id: String)
+    
+    var baseURL: String {
+        switch self {
+        case .getFilmBy( _), .getFilms:
+            return "ghibliapi.vercel.app"
+        }
+    }
+    
+    var path: String {
         switch self {
         case .getFilms:
-            return URL(string: APIConfig.baseURL + "/films")
-        case .getFilm(let id):
-            return URL(string: APIConfig.baseURL + "/films/\(id)")
+            return "/films"
+        case .getFilmBy(let id):
+            return "/films/\(id)"
+        }
+    }
+    
+    var method: HTTPMethod {
+        switch self {
+        case .getFilmBy( _), .getFilms:
+            return .get
         }
     }
 }

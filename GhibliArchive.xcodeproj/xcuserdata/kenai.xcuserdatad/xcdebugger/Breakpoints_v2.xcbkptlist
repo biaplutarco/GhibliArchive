@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "E72E6C3E-9DA9-400F-BBCB-B6A420113526"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E3172B6E-C8A7-41BE-8CC0-75504F77AD3F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GhibliArchive/Core/Network/RequestModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "getURLRequest()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6391A630-BF8C-47E3-86B2-C3AF3E840CB2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GhibliArchive/Features/Films/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D81733C4-2379-4821-A26F-69EC9AACE911"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GhibliArchive/Features/Films/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "subscribeToSnapshot()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "674D3AB0-50DF-4877-BD49-B266DB5669FF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GhibliArchive/Features/Films/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "mostRatedFilmsCollectionView"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "674D3AB0-50DF-4877-BD49-B266DB5669FF - fd660130c1cead46"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; __C.UICollectionView in GhibliArchive.FilmsViewController.mostRatedCollectionView.getter : __C.UICollectionView"
+                  moduleName = "GhibliArchive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kenai/Documents/GhibliArchive/GhibliArchive/Features/Films/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "39"
+                  endingLineNumber = "39"
+                  offsetFromSymbolStart = "300">
+               </Location>
+               <Location
+                  uuid = "674D3AB0-50DF-4877-BD49-B266DB5669FF - fd660130c1cead67"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; __C.UICollectionView in GhibliArchive.FilmsViewController.mostRatedCollectionView.getter : __C.UICollectionView"
+                  moduleName = "GhibliArchive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kenai/Documents/GhibliArchive/GhibliArchive/Features/Films/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "40"
+                  endingLineNumber = "40"
+                  offsetFromSymbolStart = "300">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F8E41FB1-30D7-4E7D-A2A2-50449EFDCCFF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GhibliArchive/Features/Films/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "init?(coder:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F8E41FB1-30D7-4E7D-A2A2-50449EFDCCFF - a2318c970d61a2c5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GhibliArchive.FilmsViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "GhibliArchive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kenai/Documents/GhibliArchive/GhibliArchive/Features/Films/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "63"
+                  endingLineNumber = "63"
+                  offsetFromSymbolStart = "112">
+               </Location>
+               <Location
+                  uuid = "F8E41FB1-30D7-4E7D-A2A2-50449EFDCCFF - a2318c970d61a2a4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GhibliArchive.FilmsViewController.viewDidLoad() -&gt; ()"
+                  moduleName = "GhibliArchive"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kenai/Documents/GhibliArchive/GhibliArchive/Features/Films/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "64"
+                  endingLineNumber = "64"
+                  offsetFromSymbolStart = "104">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

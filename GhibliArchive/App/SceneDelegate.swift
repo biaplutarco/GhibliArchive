@@ -14,8 +14,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
+        let networkService = NetworkServiceImp()
+        let filmsNetworkService = FilmsNetworkService(networkService: networkService)
+        let filmsUseCase = FilmsUseCase(filmsNetworkService: filmsNetworkService)
+        let imageLoaderUseCase = ImageLoaderUseCase(networkService: networkService)
+        let viewModel = FilmsViewModel(filmsUseCase: filmsUseCase, imageLoaderUseCase: imageLoaderUseCase)        
+        let viewController = FilmsViewController(viewModel: viewModel)
+        
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = ViewController() // Define a tela inicial
+        window?.rootViewController = UINavigationController(rootViewController: viewController)
         window?.makeKeyAndVisible()
     }
 
