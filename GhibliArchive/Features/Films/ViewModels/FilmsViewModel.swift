@@ -8,95 +8,114 @@
 import Combine
 import UIKit
 
-enum FilmsViewControllerState {
-    case idle
-    case empty
-    case loading
-    case error(String)
-    case success([Film])
-}
-
-// MARK: - Section
-
-enum FilmsCollectionViewSection: Hashable {
-    case mostRated(MostRatedFilmsSectionModel)
-}
-
-// MARK: - Section Item
-
-enum FilmsCollectionViewItem: Hashable {
-    case mostRated(MostRatedFilmViewModel)
-}
-
-// MARK: - Section Model
-
-struct MostRatedFilmsSectionModel: Hashable {
-    let title: String
-//    let films: [MostRatedFilmViewModel]
-}
-
+typealias Snapshot = NSDiffableDataSourceSnapshot<FilmsCollectionViewSection, FilmsCollectionViewItem>
 
 // MARK: - Protocol
 
 protocol FilmViewModelProtocol {
-    var dataSourcePublisher: AnyPublisher<NSDiffableDataSourceSnapshot<FilmsCollectionViewSection, FilmsCollectionViewItem>, Never> { get }
-    
+    var mostRatedDataSourcePublisher: AnyPublisher<Snapshot, Never> { get }
+    var posterFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> { get }
+    var searchedFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> { get }
+    var searchTextPublisher: CurrentValueSubject<String, Never> { get }
+
     func start()
+    func searchBarDidBeginEditing()
 }
 
 // MARK: - Class
 
-final class FilmsViewModel: FilmViewModelProtocol {
-    
-    typealias Snapshot = NSDiffableDataSourceSnapshot<FilmsCollectionViewSection, FilmsCollectionViewItem>
-
-    @Published private var mostRatedFilms: [MostRatedFilmViewModel] = []
-    @Published private var allFilms: [Film] = []
-    @Published private var filmImage: UIImage?
-        
-    var dataSourcePublisher: AnyPublisher<Snapshot, Never> {
-        Publishers.CombineLatest($mostRatedFilms, $allFilms)
-            .map { self.createDataSource(mostRatedFilms: $0, allFilms: $1) }
-            .eraseToAnyPublisher()
-    }
-    
+final class FilmsViewModel {
     private let filmsUseCase: FilmsUseCaseProtocol
     private let imageLoaderUseCase: ImageLoaderUseCaseProtocol
+    
+    private var mostRatedFilmViewModels = CurrentValueSubject<[MostRatedFilmViewModel], Never>([])
+    private var posterFilmsViewModels = CurrentValueSubject<[MostRatedFilmViewModel], Never>([])
+    private var searchedFilmsViewModels = CurrentValueSubject<[MostRatedFilmViewModel], Never>([])
+
+    private var filmImage = CurrentValueSubject<UIImage?, Never>(nil)
     private var cancellables: Set<AnyCancellable> = []
+    private var allFilms: [Film] = []
+    
+    var mostRatedDataSourcePublisher: AnyPublisher<Snapshot, Never> {
+        mostRatedFilmViewModels
+                .map { self.createFilmsDataSource(with: $0) }
+                .eraseToAnyPublisher()
+    }
+    var posterFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> {
+        posterFilmsViewModels
+            .map { self.createFilmsDataSource(with: $0) }
+            .eraseToAnyPublisher()
+    }
+    var searchedFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> {
+        searchedFilmsViewModels
+            .map { self.createFilmsDataSource(with: $0) }
+            .eraseToAnyPublisher()
+    }
+    var searchTextPublisher = CurrentValueSubject<String, Never>(.init())
+    
+    // MARK: - Init
 
     init(filmsUseCase: FilmsUseCaseProtocol, imageLoaderUseCase: ImageLoaderUseCaseProtocol) {
         self.filmsUseCase = filmsUseCase
         self.imageLoaderUseCase = imageLoaderUseCase
+        
+        subscriberToSearchFilm()
     }
     
-    private func createDataSource(mostRatedFilms: [MostRatedFilmViewModel], allFilms: [Film]) -> Snapshot {
+    // MARK: - Private Methods
+    
+    private func createFilmsDataSource(with viewModels: [MostRatedFilmViewModel]) -> Snapshot {
         var snapshot = Snapshot()
 
-        if !mostRatedFilms.isEmpty {
-            let sectionModel = MostRatedFilmsSectionModel(
-                title: "Most Rated"
-            )
-            let section: FilmsCollectionViewSection = .mostRated(sectionModel)
-            snapshot.appendSections([.mostRated(sectionModel)])
-            mostRatedFilms.forEach { snapshot.appendItems([.mostRated($0)], toSection: section) }
+        if !viewModels.isEmpty {
+            let section: FilmsCollectionViewSection = .main
+            snapshot.appendSections([section])
+            viewModels.forEach { snapshot.appendItems([.film($0)], toSection: section) }
         }
-        
+
         return snapshot
     }
     
-    private func transformToMostRatedFilms(_ films: [Film]) -> [MostRatedFilmViewModel] {
-        return films.map { viewModel(from: $0)}.filter { $0.rtScore > 95 }
+    private func filterMostRatedFilms(_ films: [Film]) -> [Film] {
+        films.filter { Int($0.rtScore) ?? .zero > 95 }
     }
     
-    private func viewModel(from film: Film) -> MostRatedFilmViewModel {
-        MostRatedFilmViewModelFactory.create(from: film, imageLoader: { imageString in
-            self.imageLoaderUseCase.execute(from: imageString)
-        })
+    func searchBarDidBeginEditing() {
+        searchedFilmsViewModels.value = posterFilmsViewModels.value
     }
     
+    func subscriberToSearchFilm() {
+        searchTextPublisher
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .compactMap { text in
+                self.allFilms.filter { $0.title.contains(text) }
+            }
+            .sink { [weak self] filteredFilms in
+                guard let self = self else { return }
+                
+                if filteredFilms.isEmpty {
+                    self.searchedFilmsViewModels.value = posterFilmsViewModels.value
+                } else {
+                    self.searchedFilmsViewModels.value = filteredFilms.map {
+                        MostRatedFilmViewModelFactory.create(
+                            from: $0,
+                            imageLoader: { imageString in
+                                self.imageLoaderUseCase.execute(from: imageString)
+                            }
+                        )
+                    }
+                }
+                
+            }
+            .store(in: &cancellables)
+    }
+}
+
+// MARK: - FilmViewModelProtocol
+
+extension FilmsViewModel: FilmViewModelProtocol {
     func start() {
-//        state = .loading
-        
         filmsUseCase.execute()
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -104,12 +123,25 @@ final class FilmsViewModel: FilmViewModelProtocol {
                     break
                 case .failure(let error):
                     return
-//                    self.state = .error(error.localizedDescription)
                 }
             }, receiveValue: { films in
                 self.allFilms = films
-                self.mostRatedFilms = self.transformToMostRatedFilms(films)
-//                self.state = films.isEmpty ? .empty : .success(films)
+                self.posterFilmsViewModels.value = films.map {
+                    MostRatedFilmViewModelFactory.create(
+                        from: $0,
+                        imageLoader: { imageString in
+                            self.imageLoaderUseCase.execute(from: imageString)
+                        }
+                    )
+                }
+                self.mostRatedFilmViewModels.value = self.filterMostRatedFilms(films).map {
+                    MostRatedFilmViewModelFactory.create(
+                        from: $0,
+                        imageLoader: { imageString in
+                            self.imageLoaderUseCase.execute(from: imageString)
+                        }
+                    )
+                }
             })
             .store(in: &cancellables)
     }

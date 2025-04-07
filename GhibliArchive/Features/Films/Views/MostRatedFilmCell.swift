@@ -8,8 +8,8 @@
 import Combine
 import UIKit
 
-class MostRatedFilmCell: UICollectionViewCell {
-    static let reuseIdentifier = "MostRatedFilmCell"
+class MostRatedFilmCell: UICollectionViewCell, ReusableCell {
+    static var reuseIdentifier = "MostRatedFilmCell"
     private var cancellables: Set<AnyCancellable> = []
     
     // MARK: - Views
@@ -62,8 +62,8 @@ class MostRatedFilmCell: UICollectionViewCell {
     }()
     
     private let ratingIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "leaf.fill"))
-        imageView.tintColor = .red
+        let imageView = UIImageView(image: UIImage(named: "rt_score_icon"))
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -141,7 +141,7 @@ class MostRatedFilmCell: UICollectionViewCell {
         // Constraints
         NSLayoutConstraint.activate([
             posterImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 12),
-            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            posterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImageView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -24),
             posterImageView.widthAnchor.constraint(equalToConstant: 100),
             posterImageView.heightAnchor.constraint(equalTo: posterImageView.widthAnchor, multiplier: 1.4),
