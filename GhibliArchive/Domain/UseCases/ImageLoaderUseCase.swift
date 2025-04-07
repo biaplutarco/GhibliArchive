@@ -14,9 +14,11 @@ protocol ImageLoaderUseCaseProtocol {
 
 class ImageLoaderUseCase: ImageLoaderUseCaseProtocol {
     private let networkService: NetworkService
-    
-    init(networkService: NetworkService) {
+    private let cacheService: ImageCacheServiceProtocol
+
+    init(networkService: NetworkService, cacheService: ImageCacheServiceProtocol) {
         self.networkService = networkService
+        self.cacheService = cacheService
     }
     
     func execute(from urlString: String) -> AnyPublisher<UIImage?, Never> {
