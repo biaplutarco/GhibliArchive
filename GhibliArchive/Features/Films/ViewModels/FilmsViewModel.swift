@@ -8,17 +8,17 @@
 import Combine
 import UIKit
 
-typealias Snapshot = NSDiffableDataSourceSnapshot<FilmsCollectionViewSection, FilmsCollectionViewItem>
+typealias MostRatedFilmsSnapshot = NSDiffableDataSourceSnapshot<FilmsCollectionViewSection, MostRatedFilmsCollectionViewItem>
+typealias PosterFilmsSnapshot = NSDiffableDataSourceSnapshot<FilmsCollectionViewSection, PosterFilmsCollectionViewItem>
 
 // MARK: - Protocol
 
 protocol FilmViewModelProtocol {
-    var mostRatedDataSourcePublisher: AnyPublisher<Snapshot, Never> { get }
-    var posterFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> { get }
-    var searchedFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> { get }
     var searchTextPublisher: CurrentValueSubject<String, Never> { get }
-
+    var statePublisher: AnyPublisher<FilmsViewControllerState, Never> { get }
+    
     func start()
+    func tryAgain()
     func searchBarDidBeginEditing()
 }
 
@@ -28,31 +28,14 @@ final class FilmsViewModel {
     private let filmsUseCase: FilmsUseCaseProtocol
     private let imageLoaderUseCase: ImageLoaderUseCaseProtocol
     
-    private var mostRatedFilmViewModels = CurrentValueSubject<[MostRatedFilmViewModel], Never>([])
-    private var posterFilmsViewModels = CurrentValueSubject<[MostRatedFilmViewModel], Never>([])
-    private var searchedFilmsViewModels = CurrentValueSubject<[MostRatedFilmViewModel], Never>([])
-
+    private var state = CurrentValueSubject<FilmsViewControllerState, Never>(.loading)
     private var filmImage = CurrentValueSubject<UIImage?, Never>(nil)
     private var cancellables: Set<AnyCancellable> = []
     private var allFilms: [Film] = []
     
-    var mostRatedDataSourcePublisher: AnyPublisher<Snapshot, Never> {
-        mostRatedFilmViewModels
-                .map { self.createFilmsDataSource(with: $0) }
-                .eraseToAnyPublisher()
-    }
-    var posterFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> {
-        posterFilmsViewModels
-            .map { self.createFilmsDataSource(with: $0) }
-            .eraseToAnyPublisher()
-    }
-    var searchedFilmDataSourcePublisher: AnyPublisher<Snapshot, Never> {
-        searchedFilmsViewModels
-            .map { self.createFilmsDataSource(with: $0) }
-            .eraseToAnyPublisher()
-    }
     var searchTextPublisher = CurrentValueSubject<String, Never>(.init())
-    
+    var statePublisher: AnyPublisher<FilmsViewControllerState, Never> { state.eraseToAnyPublisher() }
+
     // MARK: - Init
 
     init(filmsUseCase: FilmsUseCaseProtocol, imageLoaderUseCase: ImageLoaderUseCaseProtocol) {
@@ -62,51 +45,111 @@ final class FilmsViewModel {
         subscriberToSearchFilm()
     }
     
-    // MARK: - Private Methods
+    private func fetchFilms() {
+        filmsUseCase.execute()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(_):
+                    self.state.value = .error(
+                        message: "The Kodama are whispering... Something has gone awry in the forest. 🌳✨ \nPlease try again, and the path may clear once more.",
+                        title: "🌿 Kodama Oops! 🌿"
+                    )
+                }
+            }, receiveValue: { films in
+                self.allFilms = films
+                let mostRatedFilms = self.filterMostRatedFilms(films)
+                let mostRatedViewMdoels = self.getMosterRatedViewModels(mostRatedFilms)
+                let posterFilmViewModels = self.getPosterFilmViewModels(films)
+
+                self.state.value = .success(
+                    mostRatedSnapshot: self.createMostRatedFilmsDataSource(with: mostRatedViewMdoels),
+                    posterFilmSnapshot: self.createPosterFilmsDataSource(with: posterFilmViewModels)
+                )
+            })
+            .store(in: &cancellables)
+    }
     
-    private func createFilmsDataSource(with viewModels: [MostRatedFilmViewModel]) -> Snapshot {
-        var snapshot = Snapshot()
+    // MARK: - DataSource
+    
+    private func createMostRatedFilmsDataSource(with viewModels: [MostRatedFilmViewModel]) -> MostRatedFilmsSnapshot {
+        var snapshot = MostRatedFilmsSnapshot()
 
         if !viewModels.isEmpty {
-            let section: FilmsCollectionViewSection = .main
+            let section: FilmsCollectionViewSection = .unique
             snapshot.appendSections([section])
-            viewModels.forEach { snapshot.appendItems([.film($0)], toSection: section) }
+            viewModels.forEach { snapshot.appendItems([.mostRatedFilm($0)], toSection: section) }
         }
 
         return snapshot
     }
     
+    private func createPosterFilmsDataSource(with viewModels: [PosterFilmViewModel]) -> PosterFilmsSnapshot {
+        var snapshot = PosterFilmsSnapshot()
+
+        if !viewModels.isEmpty {
+            let section: FilmsCollectionViewSection = .unique
+            snapshot.appendSections([section])
+            viewModels.forEach { snapshot.appendItems([.posterFilm($0)], toSection: section) }
+        }
+
+        return snapshot
+    }
+    
+    // MARK: - SetupStates
+    
+    private func showAllFilmsBeforeSearching() {
+        let viewModels = getPosterFilmViewModels(allFilms)
+        let dataSource = createPosterFilmsDataSource(with: viewModels)
+        state.value = .searched(dataSource)
+    }
+    
+    // MARK: - Logics
+    
     private func filterMostRatedFilms(_ films: [Film]) -> [Film] {
         films.filter { Int($0.rtScore) ?? .zero > 95 }
     }
     
-    func searchBarDidBeginEditing() {
-        searchedFilmsViewModels.value = posterFilmsViewModels.value
+    private func getPosterFilmViewModels(_ films: [Film]) -> [PosterFilmViewModel] {
+        films.map {
+            PosterFilmViewModelFactory.create(
+                from: $0,
+                imageLoader: { imageString in
+                    self.imageLoaderUseCase.execute(from: imageString)
+                }
+            )
+        }
     }
     
-    func subscriberToSearchFilm() {
+    private func getMosterRatedViewModels(_ films: [Film]) -> [MostRatedFilmViewModel] {
+        films.map {
+            MostRatedFilmViewModelFactory.create(
+                from: $0,
+                imageLoader: { imageString in
+                    self.imageLoaderUseCase.execute(from: imageString)
+                }
+            )
+        }
+    }
+    
+    // MARK: - Setup Bindings
+    
+    private func subscriberToSearchFilm() {
         searchTextPublisher
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates()
             .compactMap { text in
                 self.allFilms.filter { $0.title.contains(text) }
             }
-            .sink { [weak self] filteredFilms in
+            .sink { [weak self] seachedFilms in
                 guard let self = self else { return }
-                
-                if filteredFilms.isEmpty {
-                    self.searchedFilmsViewModels.value = posterFilmsViewModels.value
+                if seachedFilms.isEmpty {
+                    showAllFilmsBeforeSearching()
                 } else {
-                    self.searchedFilmsViewModels.value = filteredFilms.map {
-                        MostRatedFilmViewModelFactory.create(
-                            from: $0,
-                            imageLoader: { imageString in
-                                self.imageLoaderUseCase.execute(from: imageString)
-                            }
-                        )
-                    }
+                    let viewModels = self.getPosterFilmViewModels(seachedFilms)
+                    self.state.value = .searched(self.createPosterFilmsDataSource(with: viewModels))
                 }
-                
             }
             .store(in: &cancellables)
     }
@@ -116,33 +159,39 @@ final class FilmsViewModel {
 
 extension FilmsViewModel: FilmViewModelProtocol {
     func start() {
+        self.state.value = .error(
+            message: "The Kodama are whispering... Something has gone awry in the forest. 🌳✨ \nPlease try again, and the path may clear once more.",
+            title: "🌿 Kodama Oops! 🌿"
+        )
+    }
+    
+    func tryAgain() {
         filmsUseCase.execute()
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
                     break
-                case .failure(let error):
-                    return
+                case .failure(_):
+                    self.state.value = .error(
+                        message: "The Kodama are whispering... Something has gone awry in the forest. 🌳✨ \nPlease try again, and the path may clear once more.",
+                        title: "🌿 Kodama Oops! 🌿"
+                    )
                 }
             }, receiveValue: { films in
                 self.allFilms = films
-                self.posterFilmsViewModels.value = films.map {
-                    MostRatedFilmViewModelFactory.create(
-                        from: $0,
-                        imageLoader: { imageString in
-                            self.imageLoaderUseCase.execute(from: imageString)
-                        }
-                    )
-                }
-                self.mostRatedFilmViewModels.value = self.filterMostRatedFilms(films).map {
-                    MostRatedFilmViewModelFactory.create(
-                        from: $0,
-                        imageLoader: { imageString in
-                            self.imageLoaderUseCase.execute(from: imageString)
-                        }
-                    )
-                }
+                let mostRatedFilms = self.filterMostRatedFilms(films)
+                let mostRatedViewMdoels = self.getMosterRatedViewModels(mostRatedFilms)
+                let posterFilmViewModels = self.getPosterFilmViewModels(films)
+
+                self.state.value = .success(
+                    mostRatedSnapshot: self.createMostRatedFilmsDataSource(with: mostRatedViewMdoels),
+                    posterFilmSnapshot: self.createPosterFilmsDataSource(with: posterFilmViewModels)
+                )
             })
             .store(in: &cancellables)
+    }
+    
+    func searchBarDidBeginEditing() {
+        showAllFilmsBeforeSearching()
     }
 }

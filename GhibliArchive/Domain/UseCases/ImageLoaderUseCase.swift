@@ -13,10 +13,10 @@ protocol ImageLoaderUseCaseProtocol {
 }
 
 class ImageLoaderUseCase: ImageLoaderUseCaseProtocol {
-    private let networkService: NetworkService
+    private let networkService: NetworkServiceProtocol
     private let cacheService: ImageCacheServiceProtocol
 
-    init(networkService: NetworkService, cacheService: ImageCacheServiceProtocol) {
+    init(networkService: NetworkServiceProtocol, cacheService: ImageCacheServiceProtocol) {
         self.networkService = networkService
         self.cacheService = cacheService
     }
@@ -25,6 +25,17 @@ class ImageLoaderUseCase: ImageLoaderUseCaseProtocol {
         guard let url = URL(string: urlString) else {
             return Just(nil).eraseToAnyPublisher()
         }
-        return networkService.fetchImage(from: url)
+        if let cachedImage = cacheService.getImage(for: url) {
+            return Just(cachedImage)
+                .eraseToAnyPublisher()
+        }
+        
+        return networkService
+            .fetchImage(from: url)
+            .handleEvents(receiveOutput: { [weak self] image in
+                guard let image = image else { return }
+                self?.cacheService.saveImage(image, for: url)
+            })
+            .eraseToAnyPublisher()
     }
 }

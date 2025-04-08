@@ -40,19 +40,17 @@ class PosterFilmCell: UICollectionViewCell, ReusableCell {
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: 125),
-            imageView.heightAnchor.constraint(equalToConstant: 175)
+            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = nil
+        imageView.image = UIImage(named: "placeholder")
     }
     
     // MARK: - Configure
-    func configure(with viewModel: MostRatedFilmViewModel) {
+    func configure(with viewModel: PosterFilmViewModel) {
         viewModel.poster
             .receive(on: DispatchQueue.main)
             .sink { [weak self] image in self?.imageView.image = image }

@@ -29,7 +29,7 @@ extension String {
     }
 }
 
-// MARK: - Builder
+// MARK: - Factory
 
 struct MostRatedFilmViewModelFactory {
     static func create(from film: Film, imageLoader: (String) -> AnyPublisher<UIImage?, Never>) -> MostRatedFilmViewModel {

@@ -15,6 +15,7 @@ class MostRatedFilmCell: UICollectionViewCell, ReusableCell {
     // MARK: - Views
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = UIImage(named: "placeholder")
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 6
         imageView.clipsToBounds = true

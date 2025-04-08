@@ -14,12 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let networkService = NetworkServiceImp()
-        let filmsNetworkService = FilmsNetworkService(networkService: networkService)
-        let filmsUseCase = FilmsUseCase(filmsNetworkService: filmsNetworkService)
-        let imageLoaderUseCase = ImageLoaderUseCase(networkService: networkService)
-        let viewModel = FilmsViewModel(filmsUseCase: filmsUseCase, imageLoaderUseCase: imageLoaderUseCase)
-        let viewController = FilmsViewController(viewModel: viewModel)
+        let viewController = FilmsViewControllerBuilder().build()
         
         window?.rootViewController = UINavigationController(rootViewController: viewController)
         window?.makeKeyAndVisible()

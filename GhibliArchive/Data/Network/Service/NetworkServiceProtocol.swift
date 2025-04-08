@@ -1,5 +1,5 @@
 //
-//  NetworkService.swift
+//  NetworkServiceProtocol.swift
 //  GhibliArchive
 //
 //  Created by Beatriz Plutarco on 03/04/25.
@@ -10,7 +10,7 @@ import Combine
 
 // MARK: - Protocol
 
-protocol NetworkService {
+protocol NetworkServiceProtocol {
     func fetch<T: Decodable>(endpoint: Endpoint) -> AnyPublisher<T, NetworkError>
     func fetchImage(from url: URL) -> AnyPublisher<UIImage?, Never>
 }
@@ -21,7 +21,7 @@ protocol Cacheable {
 
 // MARK: - Class
 
-final class NetworkServiceImp: NetworkService {
+final class NetworkService: NetworkServiceProtocol {
     private let session: URLSession
     
     init(session: URLSession = URLSession.shared) {
