@@ -9,12 +9,20 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    private let onboardingUserDefaults = OnboardingUserDefaults()
+
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let viewController = FilmsViewControllerBuilder().build()
+        var viewController: UIViewController = .init()
+        
+        if onboardingUserDefaults.hasSeenOnboarding() {
+            viewController = FilmsViewControllerBuilder().build()
+        } else {
+            viewController = OnboardingViewControllerBuilder().build()
+        }
         
         window?.rootViewController = UINavigationController(rootViewController: viewController)
         window?.makeKeyAndVisible()

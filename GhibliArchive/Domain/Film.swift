@@ -16,8 +16,9 @@ struct Film: Codable {
     let producer: String
     let runningTime: String
     let rtScore: String
-    let people: [String]
     let image: String
+    let banner: String
+    let releaseDate: String
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -28,7 +29,8 @@ struct Film: Codable {
         case producer
         case runningTime = "running_time"
         case rtScore = "rt_score"
-        case people
         case image
+        case banner = "movie_banner"
+        case releaseDate = "release_date"
     }
 }

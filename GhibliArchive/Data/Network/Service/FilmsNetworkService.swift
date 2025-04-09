@@ -10,6 +10,7 @@ import Foundation
 
 protocol FilmsNetworkServiceProtocol {
     func fetchFilms() -> AnyPublisher<[Film], NetworkError>
+    func fetchFilm(by id: String) -> AnyPublisher<Film, NetworkError>
 }
 
 final class FilmsNetworkService: FilmsNetworkServiceProtocol {
@@ -23,6 +24,16 @@ final class FilmsNetworkService: FilmsNetworkServiceProtocol {
         let endpoint = FilmEndpoint.getFilms
         return networkService.fetch(endpoint: endpoint)
             .map { (response: [Film]) in
+                response
+            }
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchFilm(by id: String) -> AnyPublisher<Film, NetworkError> {
+        let endpoint = FilmEndpoint.getFilmBy(id: id)
+        return networkService.fetch(endpoint: endpoint)
+            .map { (response: Film) in
                 response
             }
             .receive(on: DispatchQueue.main)

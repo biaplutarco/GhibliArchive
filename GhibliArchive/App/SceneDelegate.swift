@@ -8,14 +8,20 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    private let onboardingUserDefaults = OnboardingUserDefaults()
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-        let viewController = FilmsViewControllerBuilder().build()
-
+        var viewController: UIViewController = .init()
+        
+        if onboardingUserDefaults.hasSeenOnboarding() {
+            viewController = FilmsViewControllerBuilder().build()
+        } else {
+            viewController = OnboardingViewControllerBuilder().build()
+        }
+        
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = UINavigationController(rootViewController: viewController)
         window?.makeKeyAndVisible()
