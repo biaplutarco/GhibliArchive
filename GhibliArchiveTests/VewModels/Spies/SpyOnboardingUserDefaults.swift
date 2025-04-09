@@ -12,11 +12,11 @@ final class SpyOnboardingUserDefaults: OnboardingUserDefaultsProtocol {
     private(set) var didSeeOnboardingCalled = false
     private(set) var hasSeenOnboardingCalled = false
 
-    func didSeeOnboarding() {
+    func setHasSeeOnboarding() {
         didSeeOnboardingCalled = true
     }
     
-    func hasSeenOnboarding() -> Bool {
+    func getHasSeenOnboarding() -> Bool {
         hasSeenOnboardingCalled = true
         return false
     }

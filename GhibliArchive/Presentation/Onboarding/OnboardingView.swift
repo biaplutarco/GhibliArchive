@@ -50,8 +50,3 @@ struct OnboardingView: View {
         .edgesIgnoringSafeArea(.all)
     }
 }
-
-
-//#Preview {
-//    OnboardingView(onContinue: {})
-//}

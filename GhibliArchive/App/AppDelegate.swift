@@ -16,16 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let viewController = FilmsViewControllerBuilder().build()
+        let viewController = FilmsViewControllerFactory.make()
         let navigationController = UINavigationController(rootViewController: viewController)
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        if !onboardingUserDefaults.hasSeenOnboarding() {
-            let onboardingController = OnboardingViewControllerBuilder(
-                userDefaults: onboardingUserDefaults
-            ).build()
+        if !onboardingUserDefaults.getHasSeenOnboarding() {
+            let onboardingController = OnboardingViewControllerFactory.make()
             onboardingController.modalPresentationStyle = .fullScreen
             navigationController.present(onboardingController, animated: true)
         }

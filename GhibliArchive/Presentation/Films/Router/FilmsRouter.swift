@@ -22,12 +22,12 @@ final class FilmsRouter: FilmsRouterProtocol {
     weak var viewController: UIViewController?
     
     func goToFilmDetails(with id: String) {
-        let nextViewController = FilmDetailsViewControllerBuilder().build(with: id)
+        let nextViewController = FilmDetailsViewControllerFactory.make(with: id)
         viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
     func goToFavorites() {
-        let nextViewController = FavoritesViewControllerBuilder().build()
+        let nextViewController = FavoritesViewControllerFactory.make()
         viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
 }

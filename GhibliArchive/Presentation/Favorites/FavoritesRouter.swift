@@ -22,7 +22,7 @@ final class FavoritesRouter: FavoritesRouterProtocol {
     weak var viewController: UIViewController?
     
     func goToFilmDetails(with id: String) {
-        let nextViewController = FilmDetailsViewControllerBuilder().build(with: id)
+        let nextViewController = FilmDetailsViewControllerFactory.make(with: id)
         viewController?.navigationController?.pushViewController(nextViewController, animated: true)
     }
     

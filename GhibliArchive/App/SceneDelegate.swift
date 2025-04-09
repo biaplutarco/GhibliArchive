@@ -14,17 +14,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-        let viewController = FilmsViewControllerBuilder().build()
+        let viewController = FilmsViewControllerFactory.make()
         let navigationController = UINavigationController(rootViewController: viewController)
         
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        if !onboardingUserDefaults.hasSeenOnboarding() {
-            let onboardingController = OnboardingViewControllerBuilder(
-                userDefaults: onboardingUserDefaults
-            ).build()
+        if !onboardingUserDefaults.getHasSeenOnboarding() {
+            let onboardingController = OnboardingViewControllerFactory.make()
             onboardingController.modalPresentationStyle = .fullScreen
             navigationController.present(onboardingController, animated: true)
         }

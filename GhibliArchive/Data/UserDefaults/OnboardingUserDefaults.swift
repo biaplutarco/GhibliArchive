@@ -8,19 +8,19 @@
 import Foundation
 
 protocol OnboardingUserDefaultsProtocol {
-    func hasSeenOnboarding() -> Bool
-    func didSeeOnboarding()
+    func getHasSeenOnboarding() -> Bool
+    func setHasSeeOnboarding()
 }
 
 final class OnboardingUserDefaults: OnboardingUserDefaultsProtocol {
     private let key = "hasSeenOnboarding"
     private let defaults = UserDefaults.standard
     
-    func hasSeenOnboarding() -> Bool{
+    func getHasSeenOnboarding() -> Bool{
         defaults.bool(forKey: key)
     }
     
-    func didSeeOnboarding() {
+    func setHasSeeOnboarding() {
         defaults.set(true, forKey: key)
     }
 }

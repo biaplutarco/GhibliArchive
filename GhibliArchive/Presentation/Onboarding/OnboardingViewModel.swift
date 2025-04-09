@@ -37,6 +37,6 @@ final class OnboardingViewModel {
 
 extension OnboardingViewModel: OnboardingViewModelProtocol {
     func didSeeOnboarding() {
-        userDefaults.didSeeOnboarding()
+        userDefaults.setHasSeeOnboarding()
     }
 }

@@ -14,25 +14,25 @@ protocol FavoritesFilmUseCasaProtocol {
 }
 
 final class FavoritesFilmUseCase: FavoritesFilmUseCasaProtocol {
-    private let userDeafaults: FilmUserDefaultsProtocol
+    private let userDefaults: FilmUserDefaultsProtocol
 
-    init(userDeafaults: FilmUserDefaultsProtocol) {
-        self.userDeafaults = userDeafaults
+    init(userDefaults: FilmUserDefaultsProtocol) {
+        self.userDefaults = userDefaults
     }
 
     func toggleFavorite(_ film: Film) {
-        if userDeafaults.isFavorite(film.id) {
-            userDeafaults.removeFavorite(film)
+        if userDefaults.isFavorite(film.id) {
+            userDefaults.removeFavorite(film)
         } else {
-            userDeafaults.addFavorite(film)
+            userDefaults.addFavorite(film)
         }
     }
     
     func isFavorite(_ id: String) -> Bool {
-        userDeafaults.isFavorite(id)
+        userDefaults.isFavorite(id)
     }
     
     func getFavorites() -> [Film] {
-        userDeafaults.getFavorites()
+        userDefaults.getFavorites()
     }
 }
