@@ -43,6 +43,4 @@ extension OnboardingViewModel: OnboardingViewModelProtocol {
     func didSeeOnboarding() {
         userDefaults.didSeeOnboarding()
     }
-    
-    
 }

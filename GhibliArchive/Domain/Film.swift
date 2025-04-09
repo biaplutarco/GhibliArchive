@@ -34,3 +34,9 @@ struct Film: Codable {
         case releaseDate = "release_date"
     }
 }
+
+extension Film: Equatable {
+    static func == (lhs: Film, rhs: Film) -> Bool {
+        lhs.id == rhs.id
+    }
+}

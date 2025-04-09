@@ -20,7 +20,7 @@ protocol FilmDetailsViewModelProtocol {
 
 // MARK: - Class
 
-final class FilmDetailsViewModel: FilmDetailsViewModelProtocol {
+final class FilmDetailsViewModel {
     
     // MARK: - Properties
     

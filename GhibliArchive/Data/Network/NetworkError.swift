@@ -14,3 +14,17 @@ enum NetworkError: Error {
     case requestFailed(Int)
     case invalidJSON(String)
 }
+
+extension NetworkError: Equatable {
+    static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidURL, .invalidURL): return true
+        case (.invalidResponse, .invalidResponse): return true
+        case (.notFound, .notFound): return true
+        case (.requestFailed, .requestFailed): return true
+        case (.invalidJSON, .invalidJSON): return true
+            
+        default: return false
+        }
+    }
+}
