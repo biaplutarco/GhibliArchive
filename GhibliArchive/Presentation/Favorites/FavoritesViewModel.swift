@@ -28,9 +28,9 @@ final class FavoritesViewModel {
     
     private var warningViewModel: WarningViewModel {
         .init(
-            title: "Your Favorites Sleeps Like Haku in the River...",
-            message: "It seems your heart hasn't found a magical film yet... how about exploring the wonders of Ghibli and adding your favorites to the list?",
-            buttonTitle: "Explore!"
+            title: Strings.EmptyFavorites.title,
+            message: Strings.EmptyFavorites.message,
+            buttonTitle: Strings.EmptyFavorites.buttonTitle
         )
     }
 

@@ -22,13 +22,9 @@ protocol OnboardingViewModelProtocol {
 final class OnboardingViewModel {
     private let userDefaults: OnboardingUserDefaultsProtocol
 
-    var subtitle: String { """
-Discover the magic of Studio Ghibli like never before. Browse through a complete archive of Ghibli films, track the ones you’ve watched, and get to know more about these amazing studio!
-
-Ready to dive into a world of wonder?
-"""}
-    var buttonTitle: String { "Explore Ghibli Archive" }
-    var title: String { "Welcome to Ghibli Archive"}
+    var subtitle: String { Strings.Onboarding.subtitle }
+    var buttonTitle: String { Strings.Onboarding.buttonTitle }
+    var title: String { Strings.Onboarding.title }
     
     // MARK: - Inits
 

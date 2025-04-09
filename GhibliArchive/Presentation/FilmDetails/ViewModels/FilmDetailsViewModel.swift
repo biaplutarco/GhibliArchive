@@ -31,16 +31,16 @@ final class FilmDetailsViewModel {
     private var film: Film?
     
     private var favoriteMessage: String {
-        "Added to your favorites ✨"
+        Strings.Favorite.addedMessage
     }
     private var unfavoriteMessage: String {
-        "💨 Removed from Favorites"
+        Strings.Favorite.removedMessage
     }
     private var warningViewModel: WarningViewModel {
         .init(
-            title: "🌿 Kodama Oops! 🌿",
-            message: "The Kodama are whispering... Something has gone awry in the forest. 🌳✨ \nPlease try again, and the path may clear once more.",
-            buttonTitle: "Try Again"
+            title: Strings.Warning.title,
+            message: Strings.Warning.message,
+            buttonTitle: Strings.Warning.buttonTitle
         )
     }
     

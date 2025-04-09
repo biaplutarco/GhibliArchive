@@ -36,13 +36,13 @@ final class FilmsViewModel {
     private var allFilms: [Film] = []
     
     private var emptySearchMessage: String {
-        "🔍 No Results Found"
+        Strings.Search.emptyMessage
     }
     private var warningViewModel: WarningViewModel {
         .init(
-            title: "🌿 Kodama Oops! 🌿",
-            message: "The Kodama are whispering... Something has gone awry in the forest. 🌳✨ \nPlease try again, and the path may clear once more.",
-            buttonTitle: "Try Again"
+            title: Strings.Warning.title,
+            message: Strings.Warning.message,
+            buttonTitle: Strings.Warning.buttonTitle
         )
     }
 
