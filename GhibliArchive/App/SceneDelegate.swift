@@ -14,17 +14,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-        var viewController: UIViewController = .init()
-        
-        if onboardingUserDefaults.hasSeenOnboarding() {
-            viewController = FilmsViewControllerBuilder().build()
-        } else {
-            viewController = OnboardingViewControllerBuilder().build()
-        }
+        let viewController = FilmsViewControllerBuilder().build()
+        let navigationController = UINavigationController(rootViewController: viewController)
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = UINavigationController(rootViewController: viewController)
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+        
+        if !onboardingUserDefaults.hasSeenOnboarding() {
+            let onboardingController = OnboardingViewControllerBuilder(
+                userDefaults: onboardingUserDefaults
+            ).build()
+            onboardingController.modalPresentationStyle = .fullScreen
+            navigationController.present(onboardingController, animated: true)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

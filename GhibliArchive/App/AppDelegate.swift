@@ -16,16 +16,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        var viewController: UIViewController = .init()
+        let viewController = FilmsViewControllerBuilder().build()
+        let navigationController = UINavigationController(rootViewController: viewController)
         
-        if onboardingUserDefaults.hasSeenOnboarding() {
-            viewController = FilmsViewControllerBuilder().build()
-        } else {
-            viewController = OnboardingViewControllerBuilder().build()
-        }
-        
-        window?.rootViewController = UINavigationController(rootViewController: viewController)
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+        
+        if !onboardingUserDefaults.hasSeenOnboarding() {
+            let onboardingController = OnboardingViewControllerBuilder(
+                userDefaults: onboardingUserDefaults
+            ).build()
+            onboardingController.modalPresentationStyle = .fullScreen
+            navigationController.present(onboardingController, animated: true)
+        }
         
         return true
     }

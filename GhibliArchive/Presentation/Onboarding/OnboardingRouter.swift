@@ -17,7 +17,6 @@ final class OnboardingRouter: OnboardingRouterProtocol {
     weak var viewController: UIViewController?
     
     func continueToFilms() {
-        let nextViewController = FilmsViewControllerBuilder().build()
-        viewController?.navigationController?.pushViewController(nextViewController, animated: true)
+        viewController?.dismiss(animated: true)
     }
 }
