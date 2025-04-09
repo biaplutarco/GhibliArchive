@@ -169,7 +169,7 @@ final class FilmDetailsContentView: UIView {
     }
     
     private func configureFavoriteStyle(_ isFavorite: Bool) {
-        favoriteButton.setTitle(isFavorite ? "Unfavorite" : "Favorite", for: .normal)
+        favoriteButton.setTitle(isFavorite ? "Remove" : "Favorite", for: .normal)
         favoriteButton.setTitleColor(isFavorite ? .ghibliBlue : .white, for: .normal)
         favoriteButton.backgroundColor = isFavorite ? .ghibliGray : .ghibliBlue
         favoriteButton.layer.borderColor = UIColor.ghibliBlue.cgColor

@@ -31,17 +31,6 @@ final class FilmsViewController: StatefulViewController {
         favoritesButton.tintColor = .ghibliBlue
         return favoritesButton
     }()
-    
-    private lazy var infoButton: UIBarButtonItem = {
-        let favoritesButton = UIBarButtonItem(
-            image: UIImage(systemName: "info.circle"),
-            style: .plain,
-            target: self,
-            action: #selector(didTapFavorites)
-        )
-        favoritesButton.tintColor = .ghibliBlue
-        return favoritesButton
-    }()
 
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -131,8 +120,8 @@ final class FilmsViewController: StatefulViewController {
             renderSeach(with: snapshot)
         case .willSearch(let snapshot):
             renderSeach(with: snapshot)
-        case .emptySearched:
-            return // TODO: tratar
+        case .emptySearched(let message):
+            present(createAlert(message: message), animated: true)
         }
     }
     
@@ -186,7 +175,6 @@ extension FilmsViewController: ViewCodable {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         navigationItem.rightBarButtonItem = favoritesButton
-        navigationItem.leftBarButtonItem = infoButton
         
         warningView.delegate = self
     }

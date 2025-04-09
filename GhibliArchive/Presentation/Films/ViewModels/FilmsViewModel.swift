@@ -14,7 +14,7 @@ typealias PosterFilmsSnapshot = NSDiffableDataSourceSnapshot<FilmsCollectionView
 // MARK: - Protocol
 
 protocol FilmViewModelProtocol {
-    var searchTextPublisher: CurrentValueSubject<String, Never> { get }
+    var searchTextPublisher: PassthroughSubject<String, Never> { get }
     var statePublisher: AnyPublisher<FilmsViewControllerState, Never> { get }
     var onNavigateToFilmDetailsPublisher: PassthroughSubject<String, Never> { get }
     var onNavigateToFavoritesPublisher: PassthroughSubject<Void, Never> { get }
@@ -35,6 +35,9 @@ final class FilmsViewModel {
     private let imageLoaderUseCase: ImageLoaderUseCaseProtocol
     private var allFilms: [Film] = []
     
+    private var emptySearchMessage: String {
+        "🔍 No Results Found"
+    }
     private var warningViewModel: WarningViewModel {
         .init(
             title: "🌿 Kodama Oops! 🌿",
@@ -49,7 +52,7 @@ final class FilmsViewModel {
     private var filmImage = CurrentValueSubject<UIImage?, Never>(nil)
     private var cancellables: Set<AnyCancellable> = []
     
-    var searchTextPublisher = CurrentValueSubject<String, Never>(.init())
+    var searchTextPublisher = PassthroughSubject<String, Never>()
     var statePublisher: AnyPublisher<FilmsViewControllerState, Never> { state.eraseToAnyPublisher() }
     var onNavigateToFilmDetailsPublisher = PassthroughSubject<String, Never>()
     var onNavigateToFavoritesPublisher = PassthroughSubject<Void, Never>()
@@ -150,7 +153,7 @@ final class FilmsViewModel {
             .sink { [weak self] seachedFilms in
                 guard let self = self else { return }
                 if seachedFilms.isEmpty {
-                    self.state.send(.emptySearched)
+                    self.state.send(.emptySearched(self.emptySearchMessage))
                 } else {
                     let viewModels = self.getPosterFilmViewModels(seachedFilms)
                     self.state.send(.searched(self.createPosterFilmsSnapshot(with: viewModels)))

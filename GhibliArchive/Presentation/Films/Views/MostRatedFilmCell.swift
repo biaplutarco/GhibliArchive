@@ -113,11 +113,13 @@ extension MostRatedFilmCell: ViewCodable {
         
         let ratingStack = UIStackView(arrangedSubviews: [ratingIcon, ratingLabel])
         ratingStack.axis = .horizontal
-        ratingStack.spacing = 4
+        ratingStack.alignment = .leading
+        ratingStack.spacing = 2
         
         let mainStack = UIStackView(arrangedSubviews: [textStack, ratingStack])
         mainStack.axis = .vertical
         mainStack.spacing = 8
+        mainStack.alignment = .leading
         mainStack.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(mainStack)

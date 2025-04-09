@@ -11,7 +11,7 @@ import Combine
 final class SearchBarAdapter {
     static func bindSearchTextPublisher(
         from searchBar: UISearchBar,
-        to publisher: CurrentValueSubject<String, Never>,
+        to publisher: PassthroughSubject<String, Never>,
         storeIn cancellables: inout Set<AnyCancellable>
     ) {
         NotificationCenter.default.publisher(

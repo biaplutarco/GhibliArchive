@@ -51,4 +51,14 @@ class StatefulViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         warningView.removeFromSuperview()
     }
+    
+    func createAlert(message: String) -> UIAlertController {
+        let alert = UIAlertController(
+            title: .init(),
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        return alert
+    }
 }

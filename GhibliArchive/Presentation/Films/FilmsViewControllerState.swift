@@ -13,7 +13,7 @@ enum FilmsViewControllerState {
     case success(mostRatedSnapshot: MostRatedFilmsSnapshot, posterFilmSnapshot: PosterFilmsSnapshot)
     case searched(PosterFilmsSnapshot)
     case willSearch(PosterFilmsSnapshot)
-    case emptySearched
+    case emptySearched(String)
 }
 
 extension FilmsViewControllerState: Equatable {

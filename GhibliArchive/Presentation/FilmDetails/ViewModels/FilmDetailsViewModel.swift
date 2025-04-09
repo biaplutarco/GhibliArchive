@@ -30,6 +30,12 @@ final class FilmDetailsViewModel {
     private let id: String
     private var film: Film?
     
+    private var favoriteMessage: String {
+        "Added to your favorites ✨"
+    }
+    private var unfavoriteMessage: String {
+        "💨 Removed from Favorites"
+    }
     private var warningViewModel: WarningViewModel {
         .init(
             title: "🌿 Kodama Oops! 🌿",
@@ -101,6 +107,8 @@ extension FilmDetailsViewModel: FilmDetailsViewModelProtocol {
         guard let film = self.film else {
             return
         }
+        let message = favoritesUseCase.isFavorite(film.id) ? unfavoriteMessage : favoriteMessage
+        state.send(.alert(message))
         favoritesUseCase.toggleFavorite(film)
     }
 }

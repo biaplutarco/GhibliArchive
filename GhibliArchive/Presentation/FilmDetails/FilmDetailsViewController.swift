@@ -63,6 +63,8 @@ final class FilmDetailsViewController: StatefulViewController {
             stopLoading()
             removeWarningView()
             filmDetailsContentView.configure(with: viewModel)
+        case .alert(let message):
+            present(createAlert(message: message), animated: true)
         }
     }
 }
