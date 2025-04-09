@@ -7,6 +7,14 @@
 
 import UIKit
 
+// MARK: - Enum
+
+enum FilmsCollectionViewSection: Hashable {
+    case unique
+}
+
+// MARK: - Factory
+
 final class FilmsDataSourceFactory {
     typealias PosterFilmsDataSource = UICollectionViewDiffableDataSource<FilmsCollectionViewSection, PosterFilmViewModel>
     typealias MostRatedFilmsDataSource = UICollectionViewDiffableDataSource<FilmsCollectionViewSection, MostRatedFilmViewModel>

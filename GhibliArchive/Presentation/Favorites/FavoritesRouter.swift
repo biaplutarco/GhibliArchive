@@ -7,12 +7,16 @@
 
 import UIKit
 
+// MARK: - Protocol
+
 protocol FavoritesRouterProtocol {
     var viewController: UIViewController? { get set }
 
     func goToFilmDetails(with id: String)
     func goBack()
 }
+
+// MARK: - Class
 
 final class FavoritesRouter: FavoritesRouterProtocol {
     weak var viewController: UIViewController?

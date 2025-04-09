@@ -8,9 +8,13 @@
 import Combine
 import UIKit
 
+// MARK: - Delegate
+
 protocol FilmDetailsContentViewDelegate: AnyObject {
     func didTapFavorite()
 }
+
+// MARK: - Class
 
 final class FilmDetailsContentView: UIView {
     private var cancellables: Set<AnyCancellable> = []
@@ -129,7 +133,8 @@ final class FilmDetailsContentView: UIView {
         return stackView
     }()
     
-    // MARK: - Initialization
+    // MARK: - Inits
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -139,6 +144,7 @@ final class FilmDetailsContentView: UIView {
     }
     
     // MARK: - Configuration
+    
     func configure(with viewModel: FilmDetailsContentViewModel) {
         viewModel.banner
             .receive(on: DispatchQueue.main)
@@ -162,19 +168,23 @@ final class FilmDetailsContentView: UIView {
         ])
     }
     
-    @objc private func didTapFavorite() {
-        delegate?.didTapFavorite()
-        isFavorite.toggle()
-        configureFavoriteStyle(isFavorite)
-    }
-    
     private func configureFavoriteStyle(_ isFavorite: Bool) {
         favoriteButton.setTitle(isFavorite ? "Unfavorite" : "Favorite", for: .normal)
         favoriteButton.setTitleColor(isFavorite ? .ghibliBlue : .white, for: .normal)
         favoriteButton.backgroundColor = isFavorite ? .ghibliGray : .ghibliBlue
         favoriteButton.layer.borderColor = UIColor.ghibliBlue.cgColor
     }
+    
+    // MARK: - Actions
+    
+    @objc private func didTapFavorite() {
+        delegate?.didTapFavorite()
+        isFavorite.toggle()
+        configureFavoriteStyle(isFavorite)
+    }
 }
+
+// MARK: - ViewCodable
 
 extension FilmDetailsContentView: ViewCodable {
     func setupConstraints() {

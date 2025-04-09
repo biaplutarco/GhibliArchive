@@ -101,6 +101,8 @@ final class FavoritesViewController: StatefulViewController {
     }
 }
 
+// MARK: - ViewCodable
+
 extension FavoritesViewController: ViewCodable {
     func setupConstraints() {
         collectionView.fillToSuperview()

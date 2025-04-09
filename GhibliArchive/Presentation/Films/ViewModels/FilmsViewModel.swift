@@ -63,6 +63,8 @@ final class FilmsViewModel {
         subscriberToSearchFilm()
     }
     
+    // MARK: - Private Methods
+    
     private func fetchFilms() {
         filmsUseCase.execute()
             .sink(receiveCompletion: { completion in

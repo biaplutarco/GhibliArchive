@@ -8,6 +8,8 @@
 import UIKit
 import Combine
 
+// MARK: - Protocol
+
 protocol FilmDetailsViewModelProtocol {
     var statePublisher: AnyPublisher<FilmDetailsViewControllerState, Never> { get }
     
@@ -15,6 +17,8 @@ protocol FilmDetailsViewModelProtocol {
     func tryAgain()
     func didTapFavorite()
 }
+
+// MARK: - Class
 
 final class FilmDetailsViewModel: FilmDetailsViewModelProtocol {
     
@@ -80,8 +84,11 @@ final class FilmDetailsViewModel: FilmDetailsViewModelProtocol {
             })
             .store(in: &cancellables)
     }
-    
-    // MARK: - Public Methods
+}
+
+// MARK: - FilmDetailsViewModelProtocol
+
+extension FilmDetailsViewModel: FilmDetailsViewModelProtocol {
     func start() {
         fetchFilmDetails()
     }

@@ -50,6 +50,8 @@ final class FavoritesViewModel {
         self.imageLoaderUseCase = imageLoaderUseCase
     }
     
+    // MARK: - Private Methods
+    
     private func createPosterFilmsSnapshot(with viewModels: [PosterFilmViewModel]) -> PosterFilmsSnapshot {
         var snapshot = PosterFilmsSnapshot()
         if !viewModels.isEmpty {

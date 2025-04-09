@@ -7,11 +7,15 @@
 
 import UIKit
 
+// MARK: - Delegate
+
 protocol FilmsContentViewDelegate: AnyObject {
     func setMostRatedFilmsDataSource(to collectionView: UICollectionView)
     func setAllFilmsDataSource(to collectionView: UICollectionView)
     func collectionType(_ type: FilmsContentView.CollectionType, didSelectItemAt indexPath: IndexPath)
 }
+
+// MARK: - Class
 
 final class FilmsContentView: UIView {
     enum CollectionType {
@@ -97,6 +101,8 @@ final class FilmsContentView: UIView {
         return CGSize(width: width, height: width * heightMultiplier)
     }
 }
+
+// MARK: - ViewCodable
 
 extension FilmsContentView: ViewCodable {
     func setupConstraints() {

@@ -44,6 +44,8 @@ class PosterFilmCell: UICollectionViewCell, ReusableCell {
     }
 }
 
+// MARK: - ViewCodable
+
 extension PosterFilmCell: ViewCodable {
     func setupConstraints() {
         imageView.fillToSuperview()

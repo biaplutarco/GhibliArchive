@@ -49,22 +49,9 @@ class MostRatedFilmCell: UICollectionViewCell, ReusableCell {
         return label
     }()
     
-    private lazy var seenLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 11)
-        label.text = "Already seen"
-        return label
-    }()
-    
     private lazy var ratingIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "rt_score_icon"))
+        let imageView = UIImageView(image: .rtScoreIcon)
         imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-    
-    private lazy var seenIcon: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "eye"))
-        imageView.layer.cornerRadius = 4
         return imageView
     }()
     
@@ -75,6 +62,7 @@ class MostRatedFilmCell: UICollectionViewCell, ReusableCell {
     }()
     
     // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -101,6 +89,7 @@ class MostRatedFilmCell: UICollectionViewCell, ReusableCell {
     }
     
     // MARK: - Configure
+    
     func configure(with viewModel: MostRatedFilmViewModel) {
         viewModel.poster
             .receive(on: DispatchQueue.main)
@@ -110,11 +99,10 @@ class MostRatedFilmCell: UICollectionViewCell, ReusableCell {
         titleENLabel.text = viewModel.title
         subtitleLabel.text = viewModel.subtitle
         ratingLabel.text = "\(viewModel.rtScore)%"
-        seenLabel.text = viewModel.wasWatched ? "Already seen" : "Not seen yet"
-        seenIcon.isHidden = !viewModel.wasWatched
-        seenLabel.isHidden = !viewModel.wasWatched
     }
 }
+
+// MARK: - ViewCodable
 
 extension MostRatedFilmCell: ViewCodable {
     func setupConstraints() {
@@ -127,16 +115,7 @@ extension MostRatedFilmCell: ViewCodable {
         ratingStack.axis = .horizontal
         ratingStack.spacing = 4
         
-        let seenStack = UIStackView(arrangedSubviews: [seenIcon, seenLabel])
-        seenStack.axis = .horizontal
-        seenStack.spacing = 4
-        
-        let infoStack = UIStackView(arrangedSubviews: [ratingStack, seenStack])
-        infoStack.axis = .horizontal
-        infoStack.spacing = 12
-        infoStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        let mainStack = UIStackView(arrangedSubviews: [textStack, infoStack])
+        let mainStack = UIStackView(arrangedSubviews: [textStack, ratingStack])
         mainStack.axis = .vertical
         mainStack.spacing = 8
         mainStack.translatesAutoresizingMaskIntoConstraints = false
