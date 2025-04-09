@@ -10,7 +10,8 @@
 - **Detalhes do Filme**: Acesse informações detalhadas sobre cada filme, incluindo título, descrição e imagem.
 - **Favoritos**: Marque seus filmes favoritos e salve-os para fácil acesso.
 - **Busca**: Encontre filmes rapidamente com uma busca simples.
-- **UI/UX**: Design simples, melhorias de design no futuro.
+- **UI/UX**: Design simples, melhorias de design no futuro:
+<img width="906" alt="Captura de Tela 2025-04-09 às 11 48 35" src="https://github.com/user-attachments/assets/cbd278f1-8b98-44b9-9338-93a91f33be12" />
 
 ---
 
