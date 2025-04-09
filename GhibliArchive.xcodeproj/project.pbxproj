@@ -195,13 +195,12 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
-		3E39B5312DA4A650000B6D35 /* Utils */ = {
+		3E39B5312DA4A650000B6D35 /* Factory */ = {
 			isa = PBXGroup;
 			children = (
 				3E39B5342DA4C335000B6D35 /* FilmsDataSourceFactory.swift */,
-				3E39B52E2DA4924B000B6D35 /* FilmsViewControllerState.swift */,
 			);
-			path = Utils;
+			path = Factory;
 			sourceTree = "<group>";
 		};
 		3E39B53C2DA4D70E000B6D35 /* Extensions */ = {
@@ -227,11 +226,11 @@
 		3E39B53E2DA4D74D000B6D35 /* FilmDetails */ = {
 			isa = PBXGroup;
 			children = (
-				3E39B5592DA58E8F000B6D35 /* Utils */,
 				3E39B5492DA4DDE1000B6D35 /* ViewModels */,
 				3E39B54A2DA4DDF1000B6D35 /* Views */,
 				3E39B53F2DA4D768000B6D35 /* FilmDetailsViewController.swift */,
 				3E39B5522DA57018000B6D35 /* FilmDetailsViewControllerBuilder.swift */,
+				3E39B5472DA4DD7C000B6D35 /* FilmDetailsViewControllerState.swift */,
 			);
 			path = FilmDetails;
 			sourceTree = "<group>";
@@ -259,14 +258,6 @@
 				3E39B5502DA4E117000B6D35 /* FilmsRouter.swift */,
 			);
 			path = Router;
-			sourceTree = "<group>";
-		};
-		3E39B5592DA58E8F000B6D35 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				3E39B5472DA4DD7C000B6D35 /* FilmDetailsViewControllerState.swift */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 		3E39B55E2DA5B2C0000B6D35 /* UserDefaults */ = {
@@ -373,12 +364,13 @@
 		3E44B6B52DA03A8D00527213 /* Films */ = {
 			isa = PBXGroup;
 			children = (
-				3E39B5312DA4A650000B6D35 /* Utils */,
+				3E39B5312DA4A650000B6D35 /* Factory */,
 				3E39B54F2DA4E105000B6D35 /* Router */,
 				3E39B50E2DA2D1F1000B6D35 /* ViewModels */,
 				3E44B6BF2DA05F5B00527213 /* Views */,
 				3E44B6852D9F1F6700527213 /* FilmsViewController.swift */,
 				3E39B5262DA46715000B6D35 /* FilmsViewControllerBuilder.swift */,
+				3E39B52E2DA4924B000B6D35 /* FilmsViewControllerState.swift */,
 			);
 			path = Films;
 			sourceTree = "<group>";
